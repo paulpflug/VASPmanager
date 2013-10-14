@@ -18,7 +18,7 @@ class vaspconfig(object):
         self.path=path
     def incar(self,para=dict(),save=True):
         file = self.path+self.__incar
-        readData = files.readfile(file) 
+        readData = files.readfile(file)
         paraold = dict()
         for i in range(len(readData)):
             s = readData[i].split("=")
@@ -39,11 +39,11 @@ class vaspconfig(object):
             file=newfile[0]
         result = dict()
         readData = files.readfile(file)
-        if para.has_key(par.Kpoints):
-            readData[1] = para[par.Kpoints]
+        if para.has_key(par.Kcount):
+            readData[1] = para[par.Kcount]
         else:
             s=readData[1].split()[0]
-            result[par.Kpoints] = str(s)+'\n'
+            result[par.Kcount] = str(s)+'\n'
         ktype =""
         if para.has_key(par.Ktype):
             readData[2] = para[par.Ktype]
@@ -56,8 +56,8 @@ class vaspconfig(object):
                 readData[3] = para[par.Klinetype]
             else:
                 result[par.Klinetype] = readData[3]
-            if para.has_key(par.Kline):              
-                for i in range(4,len(readData)):               
+            if para.has_key(par.Kline):
+                for i in range(4,len(readData)):
                     readData[i]=""
                 data =[]
                 i = 0
@@ -71,8 +71,8 @@ class vaspconfig(object):
                     i+=1
                 readData[4]='\n'.join(data)
             else:
-                klinedata =[]                
-                for i in range(4,len(readData)):                
+                klinedata =[]
+                for i in range(4,len(readData)):
                     if readData[i]!="\n":
                         klinedata.append(readData[i].split())
                 result[par.Kline]=klinedata
@@ -85,7 +85,7 @@ class vaspconfig(object):
             else:
                 if len(readData)>3:
                     s = str(readData[3])
-                    result[par.Kmesh]=s.split()        
+                    result[par.Kmesh]=s.split()
         if save:
             files.writefile(file,readData)
         return result
@@ -109,12 +109,12 @@ class vaspconfig(object):
                 return dict()
             file=newfile[0]
         result = dict()
-        readData = files.readfile(file) 
+        readData = files.readfile(file)
         if para.has_key(par.LatticeConstant):
             readData[1] = files.toLine(para[par.LatticeConstant])
         else:
             if len(readData)>1:
-                s = str(readData[1])           
+                s = str(readData[1])
                 result[par.LatticeConstant] = s.strip(' \n')
         if para.has_key(par.Basisvectors):
             readData[2] = files.matrixToLine(para[par.Basisvectors])
@@ -124,10 +124,10 @@ class vaspconfig(object):
             if len(readData)>4:
                 bv = list()
                 for i in range(2,5):
-                    bv.append(filter(None,str(readData[i]).strip(' \n').split(" ")))                    
+                    bv.append(filter(None,str(readData[i]).strip(' \n').split(" ")))
                 result[par.Basisvectors] =bv
-        atomcount=0           
-        if para.has_key(par.Atoms): 
+        atomcount=0
+        if para.has_key(par.Atoms):
             readData[5]=""
             readData[6]=""
             for atom in para[par.Atoms]:
@@ -155,13 +155,13 @@ class vaspconfig(object):
         atomtext=list()
         if not (para.has_key(par.Atompos) and para.has_key(par.Atommove)):
             for i in atomlines:
-                atomtext.append(filter(None,str(readData[i]).strip(' \n').split(" ")))           
+                atomtext.append(filter(None,str(readData[i]).strip(' \n').split(" ")))
         if para.has_key(par.Atompos):
            if len(para[par.Atompos])==atomcount:
                 for i in range(0,atomcount):
                     text[i]=files.vecToLine(para[par.Atompos][i])[:-1]
         else:
-           ap= list()                   
+           ap= list()
            for i in range(0,atomcount):
                 ap.append(atomtext[i][0:3])
                 text[i]=" ".join(atomtext[i][0:3])
@@ -182,9 +182,9 @@ class vaspconfig(object):
         if len(atomlines) == 0:
             atomlines.append(9)
         for i in range(atomlines[0],len(readData)):
-            readData[i]="" 
+            readData[i]=""
         while len(readData)<=atomlines[0]:
-            readData.append("")            
+            readData.append("")
         readData[atomlines[0]]='\n'.join(text)
         if save:
             files.writefile(file,readData)
@@ -242,8 +242,8 @@ class vaspconfig(object):
                 para[paras]=parameters[paras]
         if len(para)>0:
             self.kpoints(para=para)
-        
-        
+
+
         if parameters.has_key(par.Dualizesuper1) or parameters.has_key(par.Dualizesuper2) or parameters.has_key(par.Dualizetranslation):
             super1 = [1,1,1]
             if parameters.has_key(par.Dualizesuper1):
@@ -283,7 +283,7 @@ class vaspconfig(object):
                 Atoms=parameters[par.Noiseatoms]
             self.noiseonposition(parameters[par.Noise],atoms=Atoms,save=True)
         if parameters.has_key(par.Potpath) and parameters.has_key(par.Pottype):
-            ### selecting right potcar            
+            ### selecting right potcar
             para = self.poscar()
             potcar = open(self.path+"POTCAR",'wb')
             potpath = parameters[par.Potpath]
@@ -299,7 +299,7 @@ class vaspconfig(object):
                         print "found POTCAR: "+potpath+availpotcars[i]
                         shutil.copyfileobj(open(potpath+availpotcars[i],'rb'), potcar)
                         break
-            potcar.close()          
+            potcar.close()
             if (not found == len(para[par.Atoms])):
                 raise IOError("No POTCAR found")
     def noiseonposition(self,d,atoms=None,para=None,save=False):
@@ -309,11 +309,11 @@ class vaspconfig(object):
         newpara= dict()
         if not para:
             para = self.poscar()
-        atpos = para[par.Atompos]  
+        atpos = para[par.Atompos]
         if not atoms:
             atoms = range(0,len(atpos))
         for i in atoms:
-            for j in range(0,3):                
+            for j in range(0,3):
                 val =float(atpos[i][j])
                 valrandom = random.gauss(d[j][0],d[j][1])
                 if(random.randint(0,1)):
@@ -335,7 +335,7 @@ class vaspconfig(object):
         newpara= dict()
         if not para:
             para = self.poscar()
-        bv = para[par.Basisvectors]  
+        bv = para[par.Basisvectors]
         a = float(para[par.LatticeConstant])
         factor = [1,1,1]
         for i in range(0,3):
@@ -344,18 +344,18 @@ class vaspconfig(object):
             for j in range(0,3):
                 bv[i][j]=str(float(bv[i][j])+vac[i]*float(bv[i][j]))
             factor[i]=factor[i]/o.length(bv[i])
-        newpara[par.Basisvectors]=bv          
+        newpara[par.Basisvectors]=bv
         atompos = para[par.Atompos]
         means =[0,0,0]
         for atom in atompos:
             for i in range(0,3):
                 means[i]+=float(atom[i])
         for i in range(0,3):
-            means[i] = means[i]/len(atompos)*factor[i]        
+            means[i] = means[i]/len(atompos)*factor[i]
         for atom in atompos:
             for i in range(0,3):
                     atom[i]=str(float(atom[i])*factor[i]+0.5-means[i])
-        
+
         newpara[par.Atompos]=atompos
         newpara[par.Atoms] = para[par.Atoms]
         newpara[par.Atommove] = para[par.Atommove]
@@ -363,7 +363,7 @@ class vaspconfig(object):
         if save:
             print("saving vacuumedposcar")
             self.poscar(para=newpara,save=save)
-        return newpara 
+        return newpara
     def dualize(self,translation,super1,super2,rotation=0,atommoves1=[],atommoves2=[],flipbottom=False,save=True):
         para1 = self.poscar()
         para2 = self.poscar(file=self.__poscar2)
@@ -414,7 +414,7 @@ class vaspconfig(object):
             newatoms.append(at)
         for at in newpara2[par.Atoms]:
             newatoms.append(at)
-        newpara1[par.Atoms]=newatoms   
+        newpara1[par.Atoms]=newatoms
         newatommove =[]
         for at in newpara2[par.Atommove]:
             newatommove.append(at)
@@ -422,11 +422,11 @@ class vaspconfig(object):
             newatommove.append(at)
         for at in newpara2[par.Atommove]:
             newatommove.append(at)
-        newpara1[par.Atommove]=newatommove  
+        newpara1[par.Atommove]=newatommove
         if save:
             print("saving dualised poscar")
             self.poscar(para=newpara1,save=save)
-        return newpara1 
+        return newpara1
     def sortatoms(self,d=3,para=None,save=False):
         atompos = para[par.Atompos]
         atommove = para[par.Atommove]
@@ -434,8 +434,8 @@ class vaspconfig(object):
         if len(atoms)==1:
             newatomlist = list()
             for i in range(0,len(atompos)):
-                newatomlist.append(atompos[i]+atommove[i])                           
-            newlist = sorted(newatomlist, key=lambda k: k[d-1]) 
+                newatomlist.append(atompos[i]+atommove[i])
+            newlist = sorted(newatomlist, key=lambda k: k[d-1])
             atompos = list()
             atommove = list()
             for i in range(0,len(newlist)):
@@ -448,7 +448,7 @@ class vaspconfig(object):
             self.poscar(para=para,save=save)
         else:
             print("sorted poscar")
-        return para  
+        return para
     def makesupercell(self,d,para=None,save=False,atommoves=[],moveatoms=[]):
         newd=[d[0]]
         if len(d) ==1:
@@ -462,7 +462,7 @@ class vaspconfig(object):
             para = self.poscar()
         atompos = para[par.Atompos]
 #        layers =[[],[],[]]
-#        extralayers=[[],[],[]]        
+#        extralayers=[[],[],[]]
 #        for i in range(0,len(atompos)):
 #            for j in range(0,3):
 #                layers[j].append(atompos[i][j])
@@ -482,7 +482,7 @@ class vaspconfig(object):
 #                        extralayers[i].append(j)
 #                if len(extralayers[i])>0:
 #                    newd[i] = newd[i]-offset+newoff2
-        bv = para[par.Basisvectors]        
+        bv = para[par.Basisvectors]
         for i in range(0,3):
             for j in range(0,3):
                 bv[i][j]=str(newd[i]*float(bv[i][j]))
@@ -500,15 +500,15 @@ class vaspconfig(object):
                 atomtranslater.append(i)
         for i in range(0,3):
             for a in range(0,atomcount):
-                atompos[a][i]=str(float(atompos[a][i])/newd[i]) 
-        dx = o.range(0,1,1./newd[0])        
+                atompos[a][i]=str(float(atompos[a][i])/newd[i])
+        dx = o.range(0,1,1./newd[0])
         dy = o.range(0,1,1./newd[1])
         dz = o.range(0,1,1./newd[2])
         for a in range(0,atomcount):
             for i in dz:
-                for j in dy:  
+                for j in dy:
                     for k in dx:
-                        #if ((i>0 or j>0) or k>0 ):                        
+                        #if ((i>0 or j>0) or k>0 ):
                         r=[0,0,0]
                         r[0]=str(float(atompos[a][0])+k)
                         r[1]=str(float(atompos[a][1])+j)
@@ -523,13 +523,13 @@ class vaspconfig(object):
                 for i in [0,1,2]:
                     newatompos[moveatom[0]][i]=str(float(newatompos[moveatom[0]][i])+moveatom[1][i])
         newpara[par.Atompos]=newatompos
-        newpara[par.Atommove]=newatommove   
+        newpara[par.Atommove]=newatommove
         newpara[par.Atoms]=newatoms
-        newpara[par.LatticeConstant]=para[par.LatticeConstant]                 
-        newpara=self.sortatoms(para=newpara)                    
-        if len(atommoves)>0:  
+        newpara[par.LatticeConstant]=para[par.LatticeConstant]
+        newpara=self.sortatoms(para=newpara)
+        if len(atommoves)>0:
             if len(atommoves)<len(atommove):
-                for i in range(0,len(atommove)-len(atommoves)):                    
+                for i in range(0,len(atommove)-len(atommoves)):
                     atommoves.append(["F"])
             for i,moves in enumerate(atommoves):
                 if len(moves)==1:
@@ -547,39 +547,41 @@ class vaspconfig(object):
 #                for layernumber in extralayers[j]:
 #                    if layernumber <= int(atoms[i][1]):
 #                        newatoms[i][1]= str(int(newatoms[i][1])+int(math.floor(newd[j-1])*math.floor(newd[j-2])))
-        
-        
+
+
         if save:
             print("saving superposcar with: %.3f %.3f %.3f"%(newd[0],newd[1],newd[2]))
             self.poscar(para=newpara,save=save)
         else:
             print("made supercell with: %.3f %.3f %.3f"%(newd[0],newd[1],newd[2]))
-        return newpara        
+        return newpara
 pass
 class par:
-    Poscar="poscar"
-    Oszicar="oszicar"
-    Incar="incar"
-    Kpoints="kpoints"
-    custom="custom"    
-    
+    Poscar="POSCAR"
+    Poscar2="POSCAR2"
+    Oszicar="OSZICAR"
+    Incar="INCAR"
+    Kpoints="KPOINTS"
+    Chgcar="CHGCAR"
+    custom="custom"
+
     Energy="E"
-    
+
     Pottype="pottype"
     Potpath="potpath"
-    
-    Kpoints="kpoints"
+
+    Kcount="kcount"
     Ktype="ktype"
     Kmesh="k"
     Klinetype="kltype"
-    Kline="kline"    
-    
+    Kline="kline"
+
     Basisvectors="r"
     Atoms="atoms"
     Atompos="ra"
     Atommove="va"
     LatticeConstant = "a"
-    
+
     Nparallel="NPAR"
     NBands="NBANDS" #determines the actual number of bands in the calculation
     EnergyCut="ENCUT"
@@ -600,7 +602,7 @@ class par:
     IBand="IBAND"
     EInt="EINT"
 
-    
+
     Dualizetranslation="dualize"
     Dualizerotation="dualizerot"
     Dualizesuper1="dualizes1"
@@ -611,45 +613,21 @@ class par:
     Supercell="super"
     Superatommoves="satommove"
     Supermoveatoms="smoveatom"
-    Vacuum="vac"    
+    Vacuum="vac"
     Noise="noise"
-    Noiseatoms="noiseatoms"    
-    
+    Noiseatoms="noiseatoms"
+
     translation ={Poscar:[LatticeConstant,Basisvectors,Atoms,Atompos,Atommove],
                   Incar:[Nparallel,NBands,EnergyCut,EnergyDifference,Smearing,SmearSigma
                   ,Nsw,ICharge,LCharge,LWave,LReal,KPointUse,IBand,EInt,Algo,Precision
                   ],
-                  Kpoints:[Ktype,Kpoints,Klinetype,Kline,
+                  Kpoints:[Ktype,Kcount,Klinetype,Kline,
                   Kmesh],
                   custom:[Supercell,Superatommoves,Supermoveatoms,Vacuum,Noise,Noiseatoms
                           ,Dualizetranslation,Dualizerotation,Dualizesuper1,Dualizesuper2,Dualizemove1,Dualizemove2
-                            ,Dualizeflipbottom,Pottype,Potpath                  
+                            ,Dualizeflipbottom,Pottype,Potpath
                           ]
-                  }   
-pass
-class pot:
-    path="/ifto3/qu34cub/d_pseudopots/"
-    potcar="POTCAR"
-    dual="Dual"
-    si ="Si"
-    ag ="Ag"
-    lda ="LDA"
-    gga ="GGAPW91"
-    @staticmethod
-    def lda_si():
-        return pot.path+"_".join([pot.potcar,pot.si,pot.lda])
-    @staticmethod
-    def gga_si():
-        return pot.path+"_".join([pot.potcar,pot.si,pot.gga])
-    @staticmethod
-    def lda_ag():
-        return pot.path+"_".join([pot.potcar,pot.ag,pot.lda])
-    @staticmethod
-    def gga_ag():
-        return pot.path+"_".join([pot.potcar,pot.ag,pot.gga])
-    @staticmethod
-    def lda_si_ag_si():
-        return pot.path+"_".join([pot.potcar,pot.dual,pot.si,pot.ag,pot.si,pot.lda])
+                  }
 pass
 def printpara(para=dict()):
     for key,val in para.iteritems():
@@ -666,4 +644,4 @@ def getnpar(ppn):
     for i in range(int(math.sqrt(ppn)),int(ppn/2)):
         if ppn%i == 0:
             return i
-    return ppn/2    
+    return ppn/2
