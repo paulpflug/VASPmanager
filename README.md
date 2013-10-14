@@ -280,13 +280,15 @@ preexec=[] # commands which will be executed in each temp directory befor calcul
 postexec=[] # commands which will be executed in each temp directory after calculation
 
 ### Job
-tempdirstart=1
-maxnpar=1000
-memorymultiplikator=1
-maxjobs = 1
-sleepduration=15*60
-runs =1
-testrun=False
+tempdirstart=1 # counter for temp directory
+maxnpar=1000 # npar is automatical calculated, this can be used to cut npar
+memorymultiplikator=1 # currently 2gb/processor is assumed. The multiplikator will lower or raise the PBS requirement
+maxjobs = 1 # maximum parallel jobs
+sequential = False # If True, all jobs will be calculated in one folder only.
+sleepduration=60 # sleep duration while checking for finished jobs
+runs =1 # possibility to plan consecutive runs for all parameters. Files will be saved like this: POSCAR1, POSCAR2 ...
+testrun=False # only creates folders and moves/manipulate files, no calculation
+verbose=False # more information to STDOUT, will be ugly!
 
 ### Settings
 # Cleanup of the job. First entry is the name of the file, second is the

@@ -50,7 +50,7 @@ class job(object):
     maxnpar=1000
     memorymultiplikator=1
     maxjobs = 1
-    sleepduration=15*60
+    sleepduration=60
     runs =1
     detailedruns=dict()
     testrun=False
