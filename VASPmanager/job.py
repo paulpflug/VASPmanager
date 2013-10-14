@@ -21,8 +21,7 @@ class job(object):
     inputfiles={vconf.par.Incar:"INCAR",
                 vconf.par.Kpoints:"KPOINTS",
                 vconf.par.Poscar:"POSCAR",
-                vconf.par.Chgcar:"CHGCAR",
-                vconf.par.Poscar2:"POSCAR2"}
+                vconf.par.Chgcar:"CHGCAR"}
     oldinputfiles=[["CONTCAR","POSCAR"],["CHGCAR","CHGCAR"]]
     potcarpath=""
     potcartype="LDA"
@@ -43,7 +42,7 @@ class job(object):
     tempdirstart=1
     jobs = dict()
     jobruns = dict()
-    jobidfile="/homes3/ifto/qu34cub/Hosts/jobids"
+    jobidfile=""
     linkfilestodir=[]
     preexec=[]
     postexec=[]
@@ -312,9 +311,9 @@ class job(object):
                 foldername = foldername+"+"+self.parameters[parnr][0]+"_"+valuestring
         return foldername+"/"
     def replaceDirectory(self,jobnr,filestring=""):
-        if filestring.find("%workpath")>-1:
+        if filestring.find("%temppath")>-1:
             path = self.gettemppath(jobnr)
-            filestring = filestring.replace("%workpath",path)
+            filestring = filestring.replace("%temppath",path)
         if filestring.find("%savepath")>-1:
             path = self.workpath+self.getparfolder(jobnr)
             filestring = filestring.replace("%savepath",path)
