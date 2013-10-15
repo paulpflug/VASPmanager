@@ -2,3 +2,4 @@
 CHANGES.txt
 README.txt
 setup.py
+test/test.py

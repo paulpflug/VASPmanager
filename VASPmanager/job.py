@@ -337,10 +337,10 @@ class job(object):
     def run(self):
         if self.sequential:
             self.maxjobs=1;
-        self.fixparameters[vconf.par.Nparallel]=vconf.getnpar(self.ppn*self.nodes)
-        if self.fixparameters[vconf.par.Nparallel] > self.maxnpar:
-            self.fixparameters[vconf.par.Nparallel] = self.maxnpar
-        self.fixparameters[vconf.par.LPlane]=".TRUE."
+        self.fixparameters[vconf.par.NPAR]=vconf.getnpar(self.ppn*self.nodes)
+        if self.fixparameters[vconf.par.NPAR] > self.maxnpar:
+            self.fixparameters[vconf.par.NPAR] = self.maxnpar
+        self.fixparameters[vconf.par.LPLANE]=".TRUE."
         if self.testrun:
             self.sleepduration=10
         i = 0

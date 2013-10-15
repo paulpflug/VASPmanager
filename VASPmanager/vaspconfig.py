@@ -242,7 +242,7 @@ class par:
     Incar="INCAR"
     Kpoints="KPOINTS"
     Chgcar="CHGCAR"
-
+    custom="custom"
 
     Pottype="pottype"
     Potpath="potpath"
@@ -303,8 +303,7 @@ class par:
     EINT
                   ],
                   Kpoints:[Ktype,Kcount,Klinetype,Kline,
-                  Kmesh],
-                  custom:[Pottype,Potpath]
+                  Kmesh]
                   }
 pass
 def printpara(para=dict()):
