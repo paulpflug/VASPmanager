@@ -205,6 +205,10 @@ The optional `parameternames` requires only a list of names, if not provided, a 
 For efficent parameter calculation [numpy](http://www.numpy.org/) is recommended.
 
 ## Common scenarios
+##### Resume broken calculation
+Just set `j.useoldFiles=True` and restart. Will search in workdir for files of the broken calculation and resume. Will set the number of the run, so it doesn't overwrite the old files, once finished.
+If the broken calculation produced output files like `OUTCAR1` the resumed calculation will make `OUTCAR2`.
+See explanation of the runs parameter in [Job class parameters](#job-class-parameters).
 ##### vdw activated calculation
 * right settings in INCAR
 * link vdw kernel `j.linkfilestodir=["/path/to/vdw-kernel"]`
