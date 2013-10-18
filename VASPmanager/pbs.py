@@ -23,7 +23,7 @@ cd %s
 def qsub(file):
     out = sub.Popen(["qsub" , file],stdout=sub.PIPE)
     out, err = out.communicate()
-    jobid = re.search("\d{5,7}",out).group(0)
+    jobid = re.search("\d{5,8}",out).group(0)
     print "Job: "+jobid+" gestartet"
     return jobid
 
