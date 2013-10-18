@@ -12,7 +12,7 @@ This tool was created for simple and fast PBS Job managing and is currently only
 The tool is implemented in pure python and most of it is easy to understand.
 
 ### PBS exclusive
-This script currently is PBS exclusive. If you have to work with another cluster managment system you can easily adapt it. Look at this [file](../../tree/master/VASPmanager/VASPmanager/pbs.py) and change the first 4 functions, so they work for your case, then please submit it.
+This script currently is PBS exclusive. If you have to work with another cluster managment system you can easily adapt it. Look at this [file](../../tree/master/VASPmanager/pbs.py) and change the first 4 functions, so they work for your case, then please submit it.
 
 
 ## Index
