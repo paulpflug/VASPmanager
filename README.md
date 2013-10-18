@@ -23,14 +23,14 @@ The tool is implemented in pure python and most of it is easy to understand.
 - [Job class parameters](#job-class-parameters)
 
 ## Install
-###### Tarball as a package
+##### Tarball as a package
 * download [VASPmanager package](https://www.dropbox.com/s/uwo9w7jklokc1pc/VASPmanager-0.1.0.tar.gz)
 * install in shell
 
 ```Shell
 easy_install VASPmanager-0.1.0.tar.gz
 ```
-###### Sourcecode as a package
+##### Sourcecode as a package
 * download zip from the right
 * extract and go to setup.py in VASPmanager-master/
 * install in shell
@@ -39,7 +39,7 @@ easy_install VASPmanager-0.1.0.tar.gz
 python setup.py install
 ```
 
-###### Raw sourcecode
+##### Raw sourcecode
 * clone or download & extract zip from the right
 * (optional) add VASPmanager/ directory to PYTHONPATH in your .profile
 
@@ -51,24 +51,24 @@ export PYTHONPATH=$PYTHONPATH:/your/path/to/VASPmanager
 VASPmanager manages a calculation at a PBS based cluster for you. A calculation here is not a single VASP run, but a series of connected VASP runs.
 VASPmanager helping you to create, monitor and cleanup your calculations.
 
-###### Calculation creation
+##### Calculation creation
 The heart of VASPmanager is the setting of calculation parameters, which will be explained later. The process of calculation creation consists of the following steps:
 * creating a temporary folder structure
 * filling these folders with the right files, this includes a logic for finding the POTCAR and (optional) files of preceding calculations
 * setting the parameters
 * submitting the job
 
-###### Calculation monitoring
+##### Calculation monitoring
 This is a very simple step. VASPmanager constantly checks if a calculation is finished to start the postprocessing. (This done on the mainframe, also to avoid problems with job interuptions)
 
-###### Calculation cleanup
+##### Calculation cleanup
 The cleanup consists of saving the needed files in a clean, simple pattern and deleting the temporary folders
 
 
 ## Usage
 The package mainly consists of two classes. The `job` class manages everything concerning the calculation and the `par` class yields the access to the configuration.These classes have to be imported.
 
-###### Installed as a package
+##### Installed as a package
 If you installed the package, you can use
 
 ```python
@@ -78,7 +78,7 @@ vm.par.parameter
 ```
 to import the package, initiate a job and access the configuration.
 
-###### Using raw source
+##### Using raw source
 When using the raw sourcecode, it will look like this:
 
 ```python
@@ -91,7 +91,7 @@ par.parameter
 ## Job Preparation
 Create a new folder with the files you need for calculation. (Typically POSCAR, KPOINTS and INCAR). Now create a script, which will use VASPmanager to handle the parameters. Here is a prototypical script:
 
-###### Prototypical script
+##### Prototypical script
 script.py:
 
 ```python
@@ -137,7 +137,7 @@ j.sleepduration=60
 j.run()
 ```
 
-###### Typical script call
+##### Typical script call
 
 ```Shell
 nohup python script.py &
