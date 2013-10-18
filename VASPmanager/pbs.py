@@ -10,7 +10,7 @@ def makescript(path,filename,nodes,ppn,queue,name,email,outpath,memorymultiplika
 #PBS -l walltime=%d:00:00
 #PBS -q %s
 #PBS -j oe
-#PBS -N %s 
+#PBS -N %s
 #PBS -M %s
 #PBS -o %s
 #
@@ -21,7 +21,7 @@ cd %s
 
 
 def qsub(file):
-    out = sub.Popen(["qsub" , file],stdout=sub.PIPE)    
+    out = sub.Popen(["qsub" , file],stdout=sub.PIPE)
     out, err = out.communicate()
     jobid = re.search("\d{5,7}",out).group(0)
     print "Job: "+jobid+" gestartet"

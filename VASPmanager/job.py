@@ -10,14 +10,17 @@ class job(object):
     """manages a job"""
     workpath=""
     ## [1,2,3] 1=NameFROM 2=NameTO 3=Move(or copy)
-    workfiles=[["POSCAR","POSCAR",False],["mist","log",True],["KPOINTS","KPOINTS",False],
-               ["PARCHG","PARCHG",True],
-                            ["CONTCAR","CONTCAR",False],["INCAR","INCAR",False],
-                            ["OSZICAR","OSZICAR",True],["OUTCAR","OUTCAR",True],
-                            ["vasprun.xml","vasprun.xml",True],
-                            ["CHGCAR","CHGCAR",False],
-                            ["PROCAR","PROCAR",True],
-                            ["EIGENVAL","EIGENVAL",True]]
+    workfiles=[["POSCAR","POSCAR",False],
+        ["KPOINTS","KPOINTS",False],
+        ["PARCHG","PARCHG",True],
+        ["CONTCAR","CONTCAR",False],
+        ["INCAR","INCAR",False],
+        ["OSZICAR","OSZICAR",True],
+        ["OUTCAR","OUTCAR",True],
+        ["vasprun.xml","vasprun.xml",True],
+        ["CHGCAR","CHGCAR",False],
+        ["PROCAR","PROCAR",True],
+        ["EIGENVAL","EIGENVAL",True]]
     inputfiles={vconf.par.Incar:"INCAR",
                 vconf.par.Kpoints:"KPOINTS",
                 vconf.par.Poscar:"POSCAR",
@@ -25,6 +28,7 @@ class job(object):
     oldinputfiles=[["CONTCAR","POSCAR"],["CHGCAR","CHGCAR"]]
     potcarpath=""
     potcartype="LDA"
+    outputFilename=""
     useoldFiles=False
     changeoldFiles=True
     oldFilesPath=""
@@ -38,7 +42,7 @@ class job(object):
     fixparameters=dict()
 
     temppath=""
-    tempdirstartfile="currenttemp"
+    tempdirstartFilename="currenttemp"
     tempdirstart=1
     jobs = dict()
     jobruns = dict()
@@ -46,7 +50,7 @@ class job(object):
     linkfilestodir=[]
     preexec=[]
     postexec=[]
-    runfile=""
+    runLine=""
     maxnpar=1000
     memorymultiplikator=1
     maxjobs = 1
@@ -60,7 +64,7 @@ class job(object):
     email=""
     outpath=""
     nodes=1
-    ppn=8
+    ppn=1
     queue=""
     hours=1
     pbsparameters=""
@@ -149,7 +153,7 @@ class job(object):
         print "starte job"
         runfile="test.sh"
         if not self.testrun:
-            runfile=self.runfile
+            runfile=self.runLine
         scriptname="run.sh"
         path =self.gettemppath(jobnr)
         self.startedcalcs +=1
@@ -328,13 +332,15 @@ class job(object):
     def setTempdirstart(self,count):
         if self.sequential:
             count=1
-        file =self.temppath+self.tempdirstartfile
+        file =self.temppath+self.tempdirstartFilename
         if os.path.isfile(file):
             self.tempdirstart = int(files.readfile(file)[0])
         else:
             self.tempdirstart=1
         files.writefile(file,"%.0d"%(self.tempdirstart+count+1))
     def run(self):
+        if self.outputFilename not "" :
+            self.workfiles.add([self.outputFilename,"log",True])
         if self.sequential:
             self.maxjobs=1;
         self.fixparameters[vconf.par.NPAR]=vconf.getnpar(self.ppn*self.nodes)

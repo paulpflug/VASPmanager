@@ -11,15 +11,26 @@ Rvasp can be found [here](https://github.com/paulpflug/Rvasp)
 This tool was created for simple and fast PBS Job managing and is currently only used for my specific applications. There is the probability, that you find situations where it is not obeying your command. Feel free to read the [source](../../tree/master/VASPmanager/VASPmanager), improve it and submit changes.
 The tool is implemented in pure python and most of it is easy to understand.
 
-### Install
-##### Tarball as a package
+## Index
+
+- [Install](#install)
+- [What it does](#what-it-does)
+- [Usage](#usage)
+- [Job Preparation](#job-preparation)
+- [POTCAR fetching](#potcar-fetching)
+- [Parameter usage](#parameter-usage)
+- [Currently available parameters](#currently-available-parameters)
+- [Job class parameters](#job-class-parameters)
+
+## Install
+###### Tarball as a package
 * download [VASPmanager package](https://www.dropbox.com/s/uwo9w7jklokc1pc/VASPmanager-0.1.0.tar.gz)
 * install in shell
 
 ```Shell
 easy_install VASPmanager-0.1.0.tar.gz
 ```
-##### Sourcecode as a package
+###### Sourcecode as a package
 * download zip from the right
 * extract and go to setup.py in VASPmanager-master/
 * install in shell
@@ -28,7 +39,7 @@ easy_install VASPmanager-0.1.0.tar.gz
 python setup.py install
 ```
 
-##### Raw sourcecode
+###### Raw sourcecode
 * clone or download & extract zip from the right
 * (optional) add VASPmanager/ directory to PYTHONPATH in your .profile
 
@@ -36,28 +47,28 @@ python setup.py install
 export PYTHONPATH=$PYTHONPATH:/your/path/to/VASPmanager
 ```
 
-### What it does
+## What it does
 VASPmanager manages a calculation at a PBS based cluster for you. A calculation here is not a single VASP run, but a series of connected VASP runs.
 VASPmanager helping you to create, monitor and cleanup your calculations.
 
-##### Calculation creation
+###### Calculation creation
 The heart of VASPmanager is the setting of calculation parameters, which will be explained later. The process of calculation creation consists of the following steps:
 * creating a temporary folder structure
 * filling these folders with the right files, this includes a logic for finding the POTCAR and (optional) files of preceding calculations
 * setting the parameters
 * submitting the job
 
-##### Calculation monitoring
+###### Calculation monitoring
 This is a very simple step. VASPmanager constantly checks if a calculation is finished to start the postprocessing. (This done on the mainframe, also to avoid problems with job interuptions)
 
-##### Calculation cleanup
+###### Calculation cleanup
 The cleanup consists of saving the needed files in a clean, simple pattern and deleting the temporary folders
 
 
-### Usage
-The package mainly consists of two classes. The ```job``` class manages everything concerning the calculation and the ```par``` class yields the access to the configuration.These classes have to be imported.
+## Usage
+The package mainly consists of two classes. The `job` class manages everything concerning the calculation and the `par` class yields the access to the configuration.These classes have to be imported.
 
-##### Installed as a package
+###### Installed as a package
 If you installed the package, you can use
 
 ```python
@@ -67,7 +78,7 @@ vm.par.parameter
 ```
 to import the package, initiate a job and access the configuration.
 
-##### Using raw source
+###### Using raw source
 When using the raw sourcecode, it will look like this:
 
 ```python
@@ -77,10 +88,10 @@ j = job()
 par.parameter
 ```
 
-##### Job Preparation
+## Job Preparation
 Create a new folder with the files you need for calculation. (Typically POSCAR, KPOINTS and INCAR). Now create a script, which will use VASPmanager to handle the parameters. Here is a prototypical script:
 
-##### Prototypical script
+###### Prototypical script
 script.py:
 
 ```python
@@ -98,6 +109,8 @@ j.nodes=1 #Nodes to use
 j.ppn=1 #Number of processes per node
 j.queue="QueueName"
 j.hours=50  #Walltime
+j.runLine="/path/to/mpi -f  $PBS_NODEFILE -ppn "+j.ppn+" /path/to/vasp >> output"
+
 #################
 #### Folders ####
 j.workpath=os.getcwd()+"/" #Finished calculations will be stored here
@@ -106,7 +119,7 @@ j.potcarpath="/folder/to/your/potcars/"
 #################
 ##### Files #####
 j.jobidfile="/file/where/all/jobids/will/be/stored"
-j.runfile="/Vasp/binary"
+j.outputFilename="output"
 #################
 ### Parameter ###
 j.potcartype="LDA"
@@ -124,13 +137,13 @@ j.sleepduration=60
 j.run()
 ```
 
-#### Typical script call
+###### Typical script call
 
 ```Shell
 nohup python script.py &
 ```
 
-#### POTCAR fetching
+## POTCAR fetching
 There is a requirement for successful POTCAR fetching.
 All POTCARS have to be named in the following scheme:
 
@@ -147,9 +160,9 @@ j.potcartype="[Type]"
 
 So for a silicon LDA POTCAR use: POTCAR_Si_LDA.
 Which elements are used in a calculation is determined by looking at the POSCAR. The corresponding POTCARS are then fetched and merged.
-The name for a POTCAR type is choosen by you, just make sure the script knows about the name.
+The name for a POTCAR type is chosen by you, just make sure the script knows about the name.
 
-### Parameter usage
+## Parameter usage
 The job class has two paramter inputs and the optional posibility to name your calculations.
 
 ```python
@@ -158,7 +171,7 @@ parameters2=[]
 parameternames=[]
 ```
 
-```parameters``` and ```parameters2``` work the same way, here a few examples:
+`parameters` and `parameters2` work the same way, here a few examples:
 
 ```python
 # will create two calculations, one with KPOINTS1 and the other with
@@ -183,11 +196,11 @@ parameters2=[[vm.par.Incar,["INCAR1","INCAR2"]]]
 parameters=[[vm.par.Basisvectors,[1,2,3],3,3]]
 ```
 
-The optional ```parameternames``` requires only a list of names, if not provided, a name is generated by the first entries of ```parameters``` and ```parameters2```. In the case of ```parameters``` and ```parameters2``` a list of lists is required. One parameter element consists of up to 4 pieces. First the parameter name (e.g. vm.par.Basisvectors), then a list of values (e.g. [1,2,3]), which will be used for the different calculations and two optional numbers to access a single number within a vector or a matrix.
+The optional `parameternames` requires only a list of names, if not provided, a name is generated by the first entries of `parameters` and `parameters2`. In the case of `parameters` and `parameters2` a list of lists is required. One parameter element consists of up to 4 pieces. First the parameter name (e.g. vm.par.Basisvectors), then a list of values (e.g. [1,2,3]), which will be used for the different calculations and two optional numbers to access a single number within a vector or a matrix.
 For efficent parameter calculation [numpy](http://www.numpy.org/) is recommended.
 
 
-##### Currently available parameters
+## Currently available parameters
 
 ```python
 ### Basic FILES
@@ -236,38 +249,61 @@ vm.par.EINT
 
 ```
 
-### Job class parameters
+## Job class parameters
 parameters for the Job class are given with their default values.
 
 ```python
 ### pbs
-name=""
-email=""
-outpath=""
-nodes=1
-ppn=8
-queue=""
-hours=1
+name="" # Name of the job
+email="" # Your email
+outpath="" # Path where PBS output will be stored
+nodes=1 # Nodes to use
+ppn=1 # Number of processes per node
+queue="" # Name of the queue
+hours=1 # Walltime
+# Additional pbs paramters. Will be glued to the
+# "#PBS -l nodes=1:ppn=1" line in the script
+# should propably contain a ":"
 pbsparameters=""
+# Line to call in bash script
+# "/path/to/mpi -f  $PBS_NODEFILE -ppn "+j.ppn+" /path/to/vasp >> output"
+runLine=""
+
 
 ### Folders
+# Path were the input files are searched
+# and all results will be stored
 workpath=""
+# Path were temporary directories will be created,
+# all input files copied to and calculations will be performed
 temppath=""
+# If useoldFiles (below) is set to True, will be used to search for
+# input files. If not provided, will use workpath instead.
 oldFilesPath=""
+# Folder, where all your POTCARS reside
 potcarpath=""
 
 ### Files
-tempdirstartfile="currenttemp" # relative to temppath
-jobidfile="" # absolute
-runfile="" # absolute
-linkfilestodir=[] # array of files which will be soft linked in temp dir
+# Filename of the file were STDOUT of your runLine is routed to
+# if given, will be copied along other workfiles (see below)
+outputFilename=""
+# Will be but in tempdir and contain the current temporary directory number
+tempdirstartFilename="currenttemp"
+# Absolute path + filename, will contain all current pbs jobids of the job
+jobidfile=""
+linkfilestodir=[] # Array of files which will be soft linked in temp dir
 
 ### Parameter
-j.potcartype=""
+# String, to search for right POTCAR.
+# Make sure, your POTCARS are named in this scheme: POTCAR_[Element]_[Type]
+# and are in potcarpath (above)
+potcartype=""
 useoldFiles=False # determines if this is a consecutiv job
 changeoldFiles=True # will the old files be changed according to parameters
-copyWAVECARforth=True
-copyWAVECARback=False
+# As WAVECARS are sometimes extraordinary large, they get extra treatment.
+copyWAVECARforth=True # Will copy existing WAVECAR to temp directory
+copyWAVECARback=False # Will copy calculated WAVECAR back to work directory
+# For paramters explanation read the corresponding section in the manual.
 parameters=[]
 parameters2=[]
 parameternames=[]
@@ -277,7 +313,7 @@ parameternames=[]
 # see http://docs.python.org/2/library/subprocess.html#subprocess.Popen for usage.
 # When you need to use paths, you can use the placeholders %temppath and %savepath
 preexec=[] # commands which will be executed in each temp directory befor calculation
-postexec=[] # commands which will be executed in each temp directory after calculation
+postexec=[] # commands which will be executed in each save directory after calculation
 
 ### Job
 tempdirstart=1 # counter for temp directory
