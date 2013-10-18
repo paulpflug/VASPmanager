@@ -332,7 +332,6 @@ verbose=False # more information to STDOUT, will be ugly!
 # copied. if runs is set >1 the CONTCAR is then copied over the POSCAR
 # WAVECAR is handled seperatly by copyWAVECARforth and copyWAVECARback
 workfiles=[["POSCAR","POSCAR",False],
-          ["mist","log",True],
           ["KPOINTS","KPOINTS",False],
           ["PARCHG","PARCHG",True],
           ["CONTCAR","CONTCAR",False],
