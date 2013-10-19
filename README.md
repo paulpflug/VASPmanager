@@ -30,10 +30,10 @@ This script currently is PBS exclusive. If you have to work with another cluster
 ## Install
 ##### Tarball as a package
 * download [VASPmanager package](https://www.dropbox.com/s/uwo9w7jklokc1pc/VASPmanager-0.1.0.tar.gz)
-* install in shell
+* install in shell (python-setuptools required)
 
 ```Shell
-easy_install VASPmanager-0.1.0.tar.gz
+easy_install --user VASPmanager-0.1.0.tar.gz
 ```
 ##### Sourcecode as a package
 * download zip from the right
@@ -41,7 +41,7 @@ easy_install VASPmanager-0.1.0.tar.gz
 * install in shell
 
 ```Shell
-python setup.py install
+python setup.py --user install
 ```
 
 ##### Raw sourcecode
