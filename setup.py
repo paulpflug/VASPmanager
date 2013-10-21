@@ -8,4 +8,5 @@ setup(
     license='LICENSE',
     description='Tool for managing VASP calculations on a PBS based cluster',
     long_description=open('README.txt').read(),
+    packages=['VASPmanager'],
 )
