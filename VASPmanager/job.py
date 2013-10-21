@@ -339,7 +339,7 @@ class job(object):
             self.tempdirstart=1
         files.writefile(file,"%.0d"%(self.tempdirstart+count+1))
     def run(self):
-        if self.outputFilename not "" :
+        if not self.outputFilename = "" :
             self.workfiles.add([self.outputFilename,"log",True])
         if self.sequential:
             self.maxjobs=1;
