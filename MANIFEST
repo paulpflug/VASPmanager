@@ -2,4 +2,9 @@
 CHANGES.txt
 README.txt
 setup.py
-test/test.py
+VASPmanager/__init__.py
+VASPmanager/fileoperations.py
+VASPmanager/job.py
+VASPmanager/other.py
+VASPmanager/pbs.py
+VASPmanager/vaspconfig.py
