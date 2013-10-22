@@ -114,7 +114,7 @@ j.nodes=1 #Nodes to use
 j.ppn=1 #Number of processes per node
 j.queue="QueueName"
 j.hours=50  #Walltime
-j.runLine="/path/to/mpi -f  $PBS_NODEFILE -ppn "+j.ppn+" /path/to/vasp >> output"
+j.runLine="/path/to/mpi -f  $PBS_NODEFILE -ppn "+str(j.ppn)+" /path/to/vasp >> output"
 
 #################
 #### Folders ####
