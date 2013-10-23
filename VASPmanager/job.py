@@ -340,7 +340,7 @@ class job(object):
         files.writefile(file,"%.0d"%(self.tempdirstart+count+1))
     def run(self):
         if not self.outputFilename == "" :
-            self.workfiles.add([self.outputFilename,"log",True])
+            self.workfiles.append([self.outputFilename,"log",True])
         if self.sequential:
             self.maxjobs=1;
         self.fixparameters[vconf.par.NPAR]=vconf.getnpar(self.ppn*self.nodes)
